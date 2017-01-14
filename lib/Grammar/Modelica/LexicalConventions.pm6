@@ -4,7 +4,7 @@ use v6;
 
 unit role Grammar::Modelica::LexicalConventions;
 
-token IDENT {[<NONDIGIT>[<DIGIT>||<NONDIGIT>]*]||<Q-IDENT>}
+token BASEIDENT {[[<|w><NONDIGIT>[<DIGIT>||<NONDIGIT>]*]<|w>||<Q-IDENT>]<!after <|w><keywords>>}
 
 token Q-IDENT {<[']>[<Q-CHAR>||<S-ESCAPE>]+<[']>}
 
@@ -28,6 +28,72 @@ regex UNSIGNED_INTEGER {<DIGIT>+}
 #  [ ( "e" | "E" ) [ "+" | "-" ] UNSIGNED_INTEGER ]
 regex UNSIGNED_NUMBER {<UNSIGNED_INTEGER>['.'<UNSIGNED_INTEGER>?]?[<[eE]><[+-]>?<UNSIGNED_INTEGER>]?}
 
-regex comment {['//'.*?$$]||['/*'.*?'*/']}
+regex c-comment {['//'.*?$$]||['/*'.*?'*/']}
 
-token ws { \s*<comment>*\s* }
+token ws { [\s|<c-comment>]* }
+
+rule keywords {
+  <|w>[ 'within'
+   | 'final'
+   | 'encapsulated'
+   | 'partial'
+   | 'class'
+   | 'model'
+   | 'operator'
+   | 'record'
+   | 'block'
+   | 'expandable'
+   | 'connector'
+   | 'type'
+   | 'package'
+   | 'pure'
+   | 'impure'
+   | 'operator'
+   | 'function'
+   | 'end'
+   | 'extends'
+   | 'enumeration'
+   | 'der'
+   | 'public'
+   | 'protected'
+   | 'external'
+   | 'redeclare'
+   | 'final'
+   | 'inner'
+   | 'outer'
+   | 'replaceable'
+   | 'import'
+   | 'constrainedby'
+   | 'flow'
+   | 'stream'
+   | 'discrete'
+   | 'parameter'
+   | 'constant'
+   | 'input'
+   | 'output'
+   | 'if'
+   | 'each'
+   | 'initial'
+   | 'equation'
+   | 'algorithm'
+   | 'break'
+   | 'return'
+   | 'then'
+   | 'elseif'
+   | 'else'
+   | 'end'
+   | 'for'
+   | 'loop'
+   | 'in'
+   | 'while'
+   | 'elsewhen'
+   | 'connect'
+   | 'or'
+   | 'and'
+   | 'not'
+   | 'false'
+   | 'true'
+   | 'annotation' ]<|w>
+}
+
+token IDENT {<!keywords><BASEIDENT>}

@@ -5,7 +5,7 @@ use Test;
 use lib '..\lib';
 use Grammar::Modelica;
 
-plan 59;
+plan 85;
 
 grammar TestString is Grammar::Modelica {
   rule TOP {^<STRING>$}
@@ -14,6 +14,8 @@ ok TestString.parse('"Pizza&Stuff"');
 ok TestString.parse('"This should be a good string...\\r\\n"');
 
 ok TestString.parse('"Pizza९Stuff"');
+ok TestString.parse('"Pizza ९Stuff"');
+ok TestString.parse('"Pizza ९Stuff"');
 nok TestString.parse('"Pizza"&"Stuff"');
 ok TestString.parse('"Pizza\\"&\\"Stuff"');
 nok TestString.parse('"Pizza\\Stuff"');
@@ -42,23 +44,63 @@ grammar TestQIdent is Grammar::Modelica {
 }
 ok TestQIdent.parse("'Pizza_Stuff123'");
 
+grammar TestBaseIdent is Grammar::Modelica {
+  rule TOP {^<BASEIDENT>$}
+}
+ok TestBaseIdent.parse("Pizza_Stuff123");
+ok TestBaseIdent.parse("ifPizza_Stuff123");
+ok TestBaseIdent.parse("within");
+ok TestBaseIdent.parse("encapsulated");
+
+grammar TestKeywords is Grammar::Modelica {
+  regex TOP {^<keywords>$}
+}
+
+nok TestKeywords.parse("Pizza_Stuff123");
+nok TestKeywords.parse("ifPizza_Stuff123");
+ok TestKeywords.parse("within");
+ok TestKeywords.parse("break");
+
+grammar TestIDENT is Grammar::Modelica {
+  regex TOP {^<IDENT>$}
+}
+
+ok TestIDENT.parse("Pizza_Stuff123");
+nok TestIDENT.parse(" Pizza_Stuff123");
+nok TestIDENT.parse("Pizza_Stuff123 ");
+ok TestIDENT.parse("ifPizza_Stuff123");
+nok TestIDENT.parse("within") ,'Should disalow keywords as IDENT';
+ok TestIDENT.parse("withincow");
+
 grammar TestName is Grammar::Modelica {
   rule TOP {^<name>$}
 }
 ok TestName.parse('Pizza_Stuff123');
 ok TestName.parse("'Pizza_Stuff123'");
+ok TestName.parse("'within'");
 nok TestName.parse("9wrong");
 nok TestName.parse('$wrong');
 nok TestName.parse('wr९ng');
 ok TestName.parse("_fine");
+ok TestName.parse(".ThisShouldBeFine");
+ok TestName.parse("ThisShouldBeFine.Too");
+ok TestName.parse(".AndThisShouldBeFine.Too");
+ok TestName.parse(".AndThisShouldBeFineif.Too");
+ok TestName.parse("withincow");
+nok TestName.parse("within");
+nok TestName.parse(".within");
+nok TestName.parse("ThisShouldBeFine.not");
+nok TestName.parse("not.ThisShouldBeFine");
+nok TestName.parse(".AndThisShouldBeFine.not");
+nok TestName.parse(".AndThisShouldBeFine.not.Allright");
 
-grammar TestComment is Grammar::Modelica {
-  rule TOP {^<comment>$}
+grammar TestCComment is Grammar::Modelica {
+  rule TOP {^<c-comment>$}
 }
 
-ok TestComment.parse('//this is a comment');
-ok TestComment.parse('//this is a comment ');
-ok TestComment.parse('/*this is a comment*/');
+ok TestCComment.parse('//this is a comment');
+ok TestCComment.parse('//this is a comment ');
+ok TestCComment.parse('/*this is a comment*/');
 
 grammar TestWS is Grammar::Modelica {
   rule TOP {^<ws>$}

@@ -2,24 +2,26 @@
 
 use v6;
 use Grammar::Modelica::LexicalConventions;
+use Grammar::Modelica::ClassDefinition;
+use Grammar::Modelica::Extends;
+use Grammar::Modelica::ComponentClause;
+use Grammar::Modelica::Modification;
+use Grammar::Modelica::Equations;
+use Grammar::Modelica::Expressions;
 
-unit grammar Grammar::Modelica does Grammar::Modelica::LexicalConventions;
+unit grammar Grammar::Modelica
+  does Grammar::Modelica::LexicalConventions
+  does Grammar::Modelica::ClassDefinition
+  does Grammar::Modelica::Extends
+  does Grammar::Modelica::ComponentClause
+  does Grammar::Modelica::Modification
+  does Grammar::Modelica::Equations
+  does Grammar::Modelica::Expressions;
 
-rule TOP {^ <within><class-def>* $}
+rule TOP {^ <within>?<class_def>* $}
 
-regex within { 'within' <ws>+ <name> <ws>* ';' }
+rule within { <|w>'within'<|w> <name> ';' }
 
-rule name {'.'?<IDENT>['.'?<IDENT>]?}
+rule class_def { [<|w>'final'<|w>]? <class_definition> ';' }
 
 rule bgs { 'cou!!asdfafsd!!'  }
-
-rule class-def { <bgs>? $<final>='final'? <class-definition> ';' }
-
-rule class-definition { $<encapsulated>='encapsulated'? <class-prefixes> <class-specifier> }
-
-rule class-prefixes { $<partial>='partial'? ( 'class' || 'model' || [ 'operator'? 'record' ] ||
-  'block' || [ 'expandable'? 'connector'] || 'type' || 'package' || [[ 'pure' | 'impure' ]? 'operator'? 'function'] ||
-  'operator'
-)  }
-
-rule class-specifier {<name>}
