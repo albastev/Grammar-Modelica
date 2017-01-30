@@ -1,0 +1,13 @@
+{
+    "perl" : "6.c",
+    "name" : "Grammar::Modelica",
+    "version" : "0.0.1",
+    "description" : "A Grammar for the Modelica programming language.",
+    "authors" : [ "Steven Albano" ],
+    "provides" : {
+        "Grammar::Modelica" : "lib/Grammar/Modelica.pm6"
+    },
+    "depends" : [ ],
+    "resources" : [ ],
+    "source-url" : ""
+}
