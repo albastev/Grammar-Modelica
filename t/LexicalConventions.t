@@ -5,7 +5,7 @@ use Test;
 use lib '../lib';
 use Grammar::Modelica;
 
-plan 85;
+plan 87;
 
 grammar TestString is Grammar::Modelica {
   rule TOP {^<STRING>$}
