@@ -9,5 +9,5 @@
     },
     "depends" : [ ],
     "resources" : [ ],
-    "source-url" : ""
+    "source-url" : "git://github.com/albastev/Grammar-Modelica.git"
 }
