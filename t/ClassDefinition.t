@@ -2,7 +2,7 @@
 
 use v6;
 use Test;
-use lib '..\lib';
+use lib '../lib';
 use Grammar::Modelica;
 
 plan 121;
