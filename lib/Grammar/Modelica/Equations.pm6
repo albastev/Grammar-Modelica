@@ -19,7 +19,7 @@ rule equation {
   <for_equation> ||
   <connect_clause> ||
   <when_equation> ||
-  [<name> <function_call_args>]
+  [<component_reference> <function_call_args>]
   ]
   <comment>
 }

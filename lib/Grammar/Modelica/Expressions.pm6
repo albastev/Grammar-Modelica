@@ -35,15 +35,15 @@ rule logical_factor {
 }
 
 rule relation {
-  <arithmetic_expression> [ <rel_op> <arithmetic_expression> ]?
+  <arithmetic_expression> [ <relational_operator> <arithmetic_expression> ]?
 }
 
 rule arithmetic_expression {
-  <add_op>? <term> [ <add_op> <term> ]*
+  <add_operator>? <term> [ <add_operator> <term> ]*
 }
 
 rule term {
-  <factor> [ <mul_op> <factor> ]*
+  <factor> [ <mul_operator> <factor> ]*
 }
 
 rule factor {
@@ -65,7 +65,9 @@ rule primary {
   <|w>'end'<|w>
 }
 
-rule name { '.'? <IDENT> [ '.' <IDENT> ]* }
+token type_specifier {"."?<name>}
+
+rule name { <IDENT> [ '.' <IDENT> ]* }
 
 rule component_reference {
   '.'? <IDENT> <array_subscripts>? ['.' <IDENT> <array_subscripts>? ]*
@@ -76,11 +78,27 @@ rule function_call_args {
 }
 
 rule function_arguments {
-  [ <function_argument>
-  [ [ ',' <function_arguments> ] ||
-  [ <|w>'for'<|w> <for_indices> ] ]?
-  ] ||
+  [ <expression> [ ',' <function_arguments_non_first> || [ <|w>'for'<|w> <for_indices>] ]? ]
+  ||
+  [ <|w>'function'<|w> <name> '(' <named_arguments> ')'  [ ',' <function_arguments_non_first> ]? ]
+  ||
   <named_arguments>
+}
+
+rule function_arguments_non_first {
+  [ <function_argument> [ ',' <function_arguments_non_first> ]? ]
+  ||
+  <named_arguments>
+}
+
+rule array_arguments {
+  <expression>
+  [ ',' <array_arguments_non_first> || [ <|w>'for'<|w> <for_indices> ] ]?
+}
+
+rule array_arguments_non_first {
+  <expression>
+  [ ',' <array_arguments_non_first> ]?
 }
 
 rule named_arguments {
@@ -112,8 +130,8 @@ rule comment { <string_comment> <annotation>? }
 
 rule annotation { <|w>'annotation'<|w> <class_modification> }
 
-token add_op {'+'|'-'|'.+'|'.-'}
+token add_operator {'+'|'-'|'.+'|'.-'}
 
-token mul_op {'*'|'/'|'.*'|'./'}
+token mul_operator {'*'|'/'|'.*'|'./'}
 
-token rel_op {"<"|"<="|">"|">="|"=="|"<>"}
+token relational_operator {"<"|"<="|">"|">="|"=="|"<>"}

@@ -112,7 +112,7 @@ ok TestRelation.parse('arithmetic_expression< arithmetic_expression');
 ok TestRelation.parse('arithmetic_expression < arithmetic_expression');
 
 grammar TestRelOp is Grammar::Modelica {
-  rule TOP {^<rel_op>$}
+  rule TOP {^<relational_operator>$}
 }
 
 ok TestRelOp.parse('<');
@@ -135,7 +135,7 @@ ok TestArithmeticExpression.parse('+term+term.+term.-term-term');
 ok TestArithmeticExpression.parse('+term +term.+ term .- term-term');
 
 grammar TestAddOp is Grammar::Modelica {
-  rule TOP {^<add_op>$}
+  rule TOP {^<add_operator>$}
 }
 
 ok TestAddOp.parse('+');
@@ -156,7 +156,7 @@ ok TestTerm.parse('factor*factor.*factor/factor./factor');
 ok TestTerm.parse('factor*factor .*factor/ factor ./ factor');
 
 grammar TestMulOp is Grammar::Modelica {
-  rule TOP {^<mul_op>$}
+  rule TOP {^<mul_operator>$}
 }
 
 ok TestMulOp.parse('*');
@@ -207,10 +207,10 @@ grammar TestName is Grammar::Modelica {
   rule TOP {^<name>$}
 }
 ok TestName.parse('valid_ident');
-ok TestName.parse('.valid_ident');
-ok TestName.parse('.valid_ident.valid_ident');
-ok TestName.parse('.valid_ident .valid_ident. valid_ident . valid_ident');
-nok TestName.parse('.valid_ident .valid_ident valid_ident . valid_ident');
+nok TestName.parse('.valid_ident');
+ok TestName.parse('valid_ident.valid_ident');
+ok TestName.parse('valid_ident .valid_ident. valid_ident . valid_ident');
+nok TestName.parse('valid_ident .valid_ident valid_ident . valid_ident');
 
 grammar TestComponentRef is Grammar::Modelica {
   rule TOP {^<component_reference>$}

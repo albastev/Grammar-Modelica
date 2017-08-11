@@ -13,8 +13,6 @@ rule type_prefix {
   [<|w>[ 'discrete' || 'parameter' || 'constant' ]<|w>]? [<|w>[ 'input' || 'output' ]<|w>]?
 }
 
-token type_specifier {<name>}
-
 rule component_list {
   <component_declaration> [ ',' <component_declaration> ]*
 }

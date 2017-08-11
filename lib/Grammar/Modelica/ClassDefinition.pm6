@@ -20,12 +20,12 @@ rule long_class_specifier {
 }
 
 rule short_class_specifier {
-  [<IDENT> '=' <base_prefix> <name> <array_subscripts>? <class_modification>? <comment>] ||
+  [<IDENT> '=' <base_prefix> <type_specifier> <array_subscripts>? <class_modification>? <comment>] ||
   [<IDENT> '=' 'enumeration' '(' [<enum_list>? || ':'] ')' <comment>]
 }
 
 rule der_class_specifier {
-  <IDENT> '=' 'der' '(' <name> ',' <IDENT> [ ',' <IDENT> ]* ')' <comment>
+  <IDENT> '=' 'der' '(' <type_specifier> ',' <IDENT> [ ',' <IDENT> ]* ')' <comment>
 }
 
 token base_prefix {<type_prefix>}
