@@ -78,9 +78,9 @@ rule function_call_args {
 }
 
 rule function_arguments {
-  [ <expression> [ ',' <function_arguments_non_first> || [ <|w>'for'<|w> <for_indices>] ]? ]
+  [ <expression> [ [ ',' <function_arguments_non_first> ] || [ <|w>'for'<|w> <for_indices>] ]? ]
   ||
-  [ <|w>'function'<|w> <name> '(' <named_arguments> ')'  [ ',' <function_arguments_non_first> ]? ]
+  [ <|w>'function'<|w> <name> '(' <named_arguments>? ')'  [ ',' <function_arguments_non_first> ]? ]
   ||
   <named_arguments>
 }

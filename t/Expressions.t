@@ -5,7 +5,7 @@ use Test;
 use lib '../lib';
 use Grammar::Modelica;
 
-plan 164;
+plan 169;
 
 grammar TestExpression is Grammar::Modelica {
   rule TOP {^ <expression> $}
@@ -231,21 +231,35 @@ ok TestFunctionCallArgs.parse('()');
 ok TestFunctionCallArgs.parse('(function_arguments)');
 ok TestFunctionCallArgs.parse('( function_arguments )');
 
+grammar TestFunctionArgumentsNonFirst is Grammar::Modelica {
+  rule TOP {^<function_arguments_non_first>$}
+  rule named_arguments {'named_arguments'}
+  rule function_argument {'function_argument'}
+}
+
+ok TestFunctionArgumentsNonFirst.parse('function_argument');
+ok TestFunctionArgumentsNonFirst.parse('function_argument,function_argument');
+ok TestFunctionArgumentsNonFirst.parse('function_argument,function_argument,named_arguments');
+ok TestFunctionArgumentsNonFirst.parse('named_arguments');
+nok TestFunctionArgumentsNonFirst.parse('function_argument,named_arguments,function_argument');
+
 grammar TestFunctionArguments is Grammar::Modelica {
   rule TOP {^<function_arguments>$}
-  rule function_argument {'function_argument'}
   rule for_indices {'for_indices'}
   rule named_arguments {'named_arguments'}
+  rule expression {'expression'};
+  rule function_arguments_non_first {'function_arguments_non_first'};
 }
-ok TestFunctionArguments.parse('function_argument');
-ok TestFunctionArguments.parse('function_argument,function_argument');
-ok TestFunctionArguments.parse('function_argument, named_arguments');
-ok TestFunctionArguments.parse('function_argument for for_indices');
-nok TestFunctionArguments.parse('function_argumentfor for_indices');
-nok TestFunctionArguments.parse('function_argument forfor_indices');
+
+ok TestFunctionArguments.parse('expression');
+ok TestFunctionArguments.parse('expression,function_arguments_non_first');
+ok TestFunctionArguments.parse('expression for for_indices');
+nok TestFunctionArguments.parse('expressionfor for_indices');
+nok TestFunctionArguments.parse('expression forfor_indices');
 ok TestFunctionArguments.parse('named_arguments');
-ok TestFunctionArguments.parse('function_argument,function_argument,function_argument,function_argument for for_indices');
-ok TestFunctionArguments.parse('function_argument ,function_argument, function_argument , function_argument for for_indices');
+ok TestFunctionArguments.parse('function valid_name(),function_arguments_non_first');
+ok TestFunctionArguments.parse('function valid_name(named_arguments),function_arguments_non_first');
+ok TestFunctionArguments.parse('function valid_name (named_arguments) , function_arguments_non_first');
 
 grammar TestNamedArguments is Grammar::Modelica {
   rule TOP {^<named_arguments>$}
