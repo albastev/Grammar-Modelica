@@ -9,7 +9,7 @@ plan 1;
 constant AUTHOR = $%*ENV<AUTHOR_TESTING>;
 
 if AUTHOR {
-use Test::META;
+require Test::META <&meta-ok>;
 
 # That's it
 meta-ok();
