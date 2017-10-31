@@ -14,7 +14,7 @@
         "Grammar::Modelica::LexicalConventions" : "lib/Grammar/Modelica/LexicalConventions.pm6",
         "Grammar::Modelica::Modification" : "lib/Grammar/Modelica/Modification.pm6"
     },
-    "depends" : [ ],
+    "depends" : [ "Test::Meta" ],
     "resources" : [ ],
     "source-url" : "git://github.com/albastev/Grammar-Modelica.git"
 }
