@@ -5,13 +5,14 @@ use v6;
 unit role Grammar::Modelica::Expressions;
 
 rule expression {
-  <simple_expression> ||
   [
   <|w>'if'<|w> <expression> <|w>'then'<|w> <expression> [
   <|w>'elseif'<|w> <expression> <|w>'then'<|w> <expression>
   ]*
   <|w>'else'<|w> <expression>
   ]
+  ||
+  <simple_expression>
 }
 
 rule simple_expression {
