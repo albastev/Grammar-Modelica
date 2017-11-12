@@ -92,12 +92,12 @@ rule function_arguments_non_first {
 }
 
 rule array_arguments {
-  <expression>
+  [ <element_modification_or_replaceable> || <expression> ]
   [ ',' <array_arguments_non_first> || [ <|w>'for'<|w> <for_indices> ] ]?
 }
 
 rule array_arguments_non_first {
-  <expression>
+  [ <element_modification_or_replaceable> || <expression> ]
   [ ',' <array_arguments_non_first> ]?
 }
 
