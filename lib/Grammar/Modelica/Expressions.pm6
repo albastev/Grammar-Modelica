@@ -61,7 +61,7 @@ rule primary {
   <component_reference> ||
   [ '(' <output_expression_list> ')' ] ||
   [ '[' <expression_list> [ ';' <expression_list> ]* ']' ] ||
-  [ '{' <function_arguments> '}' ] ||
+  [ '{' <array_arguments> '}' ] ||
   <|w>'end'<|w>
 }
 
