@@ -25,7 +25,6 @@ rule equation {
 
 rule statement {
   [
-    ||  <component_reference> [ ':=' <expression> || <function_call_args> ]
     ||  '(' <output_expression_list> ')' ':=' <component_reference> <function_call_args>
     ||  'break'
     ||  'return'
@@ -33,6 +32,7 @@ rule statement {
     ||  <for_statement>
     ||  <while_statement>
     ||  <when_statement>
+    ||  <component_reference> [ ':=' <expression> || <function_call_args> ]
   ]
   <comment>
 }
