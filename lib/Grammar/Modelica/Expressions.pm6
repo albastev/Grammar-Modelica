@@ -78,18 +78,15 @@ rule function_call_args {
   '(' <function_arguments>? ')'
 }
 
-regex function_arguments {:s
+rule function_arguments {
+  [ <|w>'function'<|w> <name> '(' <named_arguments>? ')'  [ ',' <function_arguments_non_first> ]? ] ||
+  <named_arguments> ||
   [ <expression> [ [ ',' <function_arguments_non_first> ] || [ <|w>'for'<|w> <for_indices>] ]? ]
-  ||
-  [ <|w>'function'<|w> <name> '(' <named_arguments>? ')'  [ ',' <function_arguments_non_first> ]? ]
-  ||
-  <named_arguments>
 }
 
-regex function_arguments_non_first {:s
+rule function_arguments_non_first {
+  <named_arguments> ||
   [ <function_argument> [ ',' <function_arguments_non_first> ]? ]
-  ||
-  <named_arguments>
 }
 
 rule array_arguments {
