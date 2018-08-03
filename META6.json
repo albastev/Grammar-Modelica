@@ -15,7 +15,7 @@
         "Grammar::Modelica::Modification" : "lib/Grammar/Modelica/Modification.pm6"
     },
     "depends" : [ ],
-    "test-depends" : [ "Test::Meta" ],
+    "test-depends" : [ "Test", "Test::META" ],
     "resources" : [ ],
     "source-url" : "git://github.com/albastev/Grammar-Modelica.git"
 }
