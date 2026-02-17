@@ -2,7 +2,7 @@
 
 use v6;
 use Test;
-use lib '../lib';
+use lib 'lib';
 use Grammar::Modelica;
 
 # Expression: if (asc2 and v<1) then 0.5/t1 else 0

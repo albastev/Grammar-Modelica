@@ -65,7 +65,7 @@ CI is configured with **GitHub Actions** (`.github/workflows/ci.yml`) and runs t
 
 ## Repository layout
 
-- `lib/Grammar/Modelica.pm6` — top-level grammar entry point
+- `lib/Grammar/Modelica.rakumod` — top-level grammar entry point
 - `lib/Grammar/Modelica/` — grammar modules by syntax domain
 - `t/` — tests and regressions
 - `examples/` — small parsing examples
