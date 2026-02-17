@@ -1,14 +1,53 @@
 # Grammar::Modelica
+
 ![Travis CI status](https://travis-ci.org/albastev/Grammar-Modelica.svg?branch=master)
-![Travis CI status](https://ci.appveyor.com/api/projects/status/dg9670t57kyohgwe/branch/master?svg=true)
+![AppVeyor CI status](https://ci.appveyor.com/api/projects/status/dg9670t57kyohgwe/branch/master?svg=true)
 
-A Perl 6 Grammar for the [Modelica Language Specification 3.4](https://www.modelica.org/documents/ModelicaSpec34.pdf) (pdf).
+Raku grammar for parsing the [Modelica Language Specification](https://www.modelica.org/documents/ModelicaSpec34.pdf), based primarily on Appendix B concrete syntax rules.
 
-The Grammar is mostly a direct translation of the concrete syntax specification found in Appendix B.
+## What this project provides
 
-See the test files to get some idea of what is going on.
+- A modular Modelica grammar under `lib/Grammar/Modelica*`
+- Parsing support for key language areas (lexical conventions, expressions, equations, class definitions, etc.)
+- Test suite in `t/` covering the main grammar components
 
-## TODO
+## Quick start
 
-  * make use of proto and more named parameters to make it more useful
-  * more stuff by and by
+```bash
+zef install --deps-only .
+```
+
+Parse a snippet:
+
+```bash
+raku -Ilib -e "use Grammar::Modelica; say so Grammar::Modelica.parse('model A end A;')"
+```
+
+## Run tests
+
+```bash
+raku -Ilib t/Modelica.t
+```
+
+or run the full suite:
+
+```bash
+prove -e "raku -Ilib" -r t
+```
+
+## Repository layout
+
+- `lib/Grammar/Modelica.pm6` — top-level grammar entry point
+- `lib/Grammar/Modelica/` — grammar modules by syntax domain
+- `t/` — tests and regressions
+- `examples/` — small parsing examples
+
+## Current status
+
+The project is stable and test-backed, with ongoing modernization work focused on:
+
+- modern Raku conventions
+- parser performance improvements
+- richer parse actions / AST-oriented outputs
+
+
