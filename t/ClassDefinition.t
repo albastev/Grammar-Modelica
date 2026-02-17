@@ -5,7 +5,7 @@ use Test;
 use lib 'lib';
 use Grammar::Modelica;
 
-plan 121;
+plan 123;
 
 # Here we create a subclass to only test the bit we are interested in
 grammar TestClassDefinition is Grammar::Modelica {
@@ -95,7 +95,7 @@ grammar TestShortClassSpecifier is Grammar::Modelica {
   token base_prefix {<|w>'base_prefix'<|w>}
   rule array_subscripts {<|w>'array_subscripts'<|w>}
   rule class_modification {<|w>'class_modification'<|w>}
-  rule comment {<|w>'comment'<|w>}
+  rule description {<|w>'comment'<|w>}
   rule enum_list {<|w>'enum_list'<|w>}
 }
 
@@ -111,7 +111,7 @@ ok TestShortClassSpecifier.parse('valid_ident = enumeration ()comment');
 
 grammar TestDerClassSpecifier is Grammar::Modelica {
   rule TOP {^<der_class_specifier>$}
-  rule comment {<|w>'comment'<|w>}
+  rule description {<|w>'comment'<|w>}
 }
 
 ok TestDerClassSpecifier.parse('valid_ident = der ( valid_name , valid_ident2 , valid_ident3 ) comment');
@@ -219,6 +219,7 @@ ok TestImportClause.parse('import valid_ident = valid_name "valid comment"');
 ok TestImportClause.parse('import valid_ident=valid_name"valid comment"');
 ok TestImportClause.parse('import valid_name "valid comment"');
 ok TestImportClause.parse('import valid_name.* "valid comment"');
+ok TestImportClause.parse('import valid_name .* "valid comment"');
 ok TestImportClause.parse('import valid_name.{valid_ident} "valid comment"');
 ok TestImportClause.parse('import valid_name.{valid_ident,valid_ident,valid_ident} "valid comment"');
 ok TestImportClause.parse('import valid_name.{ valid_ident,valid_ident,valid_ident } "valid comment"');
@@ -227,3 +228,4 @@ nok TestImportClause.parse('importvalid_name.{valid_ident,valid_ident,valid_iden
 nok TestImportClause.parse('import valid_name.valid_ident,valid_ident,valid_ident} "valid comment"');
 nok TestImportClause.parse('import valid_name.{valid_ident,valid_ident,valid_ident "valid comment"');
 nok TestImportClause.parse('import valid_name{valid_ident,valid_ident,valid_ident} "valid comment"');
+nok TestImportClause.parse('import valid_name..* "valid comment"');

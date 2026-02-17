@@ -39,7 +39,9 @@ prove -e "raku -Ilib" -r t
 Run tests in a container without installing Raku locally:
 
 ```bash
-docker run --rm -v "$PWD:/app" -w /app rakudo-star:latest prove -e "raku -Ilib" -r t
+docker build --no-cache --progress=plain -t grammar-modelica-test . 2>&1
+
+docker run --rm grammar-modelica-test 2>&1
 ```
 
 Build and run the project test image:

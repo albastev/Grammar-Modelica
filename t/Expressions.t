@@ -5,7 +5,7 @@ use Test;
 use lib 'lib';
 use Grammar::Modelica;
 
-plan 168;
+plan 177;
 
 grammar TestExpression is Grammar::Modelica {
   rule TOP {^ <expression> $}
@@ -286,13 +286,23 @@ grammar TestFunctionArgument is Grammar::Modelica {
   rule expression {'expression'}
 }
 ok TestFunctionArgument.parse('expression');
+ok TestFunctionArgument.parse('function valid_name()');
+ok TestFunctionArgument.parse('function valid_name(named_arguments)');
 ok TestFunctionArgument.parse('function valid_name (named_arguments)');
 ok TestFunctionArgument.parse('function valid_name ()');
 nok TestFunctionArgument.parse('function ()');
 nok TestFunctionArgument.parse('function valid_name');
-ok TestFunctionArgument.parse('function valid_name(named_arguments)');
 nok TestFunctionArgument.parse('functionvalid_name (named_arguments)');
 nok TestFunctionArgument.parse('function valid_name (named_arguments) expression');
+
+grammar TestFunctionPartialApplication is Grammar::Modelica {
+  rule TOP {^<function_partial_application>$}
+  rule named_arguments {'named_arguments'}
+}
+ok TestFunctionPartialApplication.parse('function valid_name()');
+ok TestFunctionPartialApplication.parse('function valid_name(named_arguments)');
+nok TestFunctionPartialApplication.parse('function valid_name');
+nok TestFunctionPartialApplication.parse('function ()');
 
 grammar TestOutputExpressionList is Grammar::Modelica {
   rule TOP {^<output_expression_list>$}
@@ -357,6 +367,19 @@ ok TestStringComment.parse('"this is a" +" string comment"');
 ok TestStringComment.parse('"this is a"+ " string comment"');
 ok TestStringComment.parse('"this is a" + " string comment" ');
 ok TestStringComment.parse(' "this is a" + " string comment"');
+
+grammar TestDescription is Grammar::Modelica {
+  rule TOP {^<description>$}
+  rule annotation {'annotation'}
+}
+ok TestDescription.parse('"valid comment" annotation');
+ok TestDescription.parse('"valid comment"');
+
+grammar TestDescriptionString is Grammar::Modelica {
+  rule TOP {^<description_string>$}
+}
+ok TestDescriptionString.parse('"this is a description string"');
+ok TestDescriptionString.parse('"this is a" + " description string"');
 
 grammar TestAnnotation is Grammar::Modelica {
   rule TOP {^<annotation>$}

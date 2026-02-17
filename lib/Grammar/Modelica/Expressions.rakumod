@@ -76,9 +76,9 @@ rule function_call_args {
 }
 
 rule function_arguments {
-  ||  <|w>'function'<|w> <name> '(' <named_arguments>? ')'  [ ',' <function_arguments_non_first> ]?
-  ||  <named_arguments>
   ||  <expression> [ [ ',' <function_arguments_non_first> ] || [ <|w>'for'<|w> <for_indices>] ]?
+  ||  <function_partial_application> [ ',' <function_arguments_non_first> ]?
+  ||  <named_arguments>
 }
 
 rule function_arguments_non_first {
@@ -105,9 +105,12 @@ rule named_argument {
   <IDENT> '=' <function_argument>
 }
 
+rule function_partial_application {
+  <|w>'function'<|w> <name> '(' <named_arguments>? ')'
+}
+
 rule function_argument {
-  ['function' <name> '(' <named_arguments>? ')' ] ||
-  <expression>
+  <function_partial_application> || <expression>
 }
 
 rule output_expression_list {
@@ -120,9 +123,14 @@ rule array_subscripts { "[" <subscript> [ "," <subscript> ]* "]" }
 
 rule subscript { ':' | <expression> }
 
-rule string_comment { <ws>? [ <STRING> [ '+' <STRING> ]* ]? }
+rule description_string { <ws>? [ <STRING> [ '+' <STRING> ]* ]? }
 
-rule comment { <string_comment> <annotation>? }
+rule description { <description_string> <annotation>? }
+
+# Backward-compatible aliases for Modelica 3.4 naming.
+rule string_comment { <description_string> }
+
+rule comment { <description> }
 
 rule annotation { 'annotation' <class_modification> }
 

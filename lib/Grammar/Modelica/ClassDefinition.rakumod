@@ -29,17 +29,17 @@ token class_specifier {
 }
 
 rule long_class_specifier {
-  ||  (<IDENT>) <string_comment> <composition> 'end' $0
-  ||  'extends' (<IDENT>) <class_modification>? <string_comment> <composition> 'end' $0
+  ||  (<IDENT>) <description_string> <composition> 'end' $0
+  ||  'extends' (<IDENT>) <class_modification>? <description_string> <composition> 'end' $0
 }
 
 rule short_class_specifier {
-  ||  <IDENT> '=' <base_prefix> <type_specifier> <array_subscripts>? <class_modification>? <comment>
-  ||  <IDENT> '=' 'enumeration' '(' [ <enum_list>? || ':' ] ')' <comment>
+  ||  <IDENT> '=' <base_prefix> <type_specifier> <array_subscripts>? <class_modification>? <description>
+  ||  <IDENT> '=' 'enumeration' '(' [ <enum_list>? || ':' ] ')' <description>
 }
 
 rule der_class_specifier {
-  <IDENT> '=' 'der' '(' <type_specifier> ',' <IDENT> [ ',' <IDENT> ]* ')' <comment>
+  <IDENT> '=' 'der' '(' <type_specifier> ',' <IDENT> [ ',' <IDENT> ]* ')' <description>
 }
 
 token base_prefix {<type_prefix>}
@@ -49,7 +49,7 @@ rule enum_list {
 }
 
 rule enumeration_literal {
-  <IDENT> <comment>
+  <IDENT> <description>
 }
 
 rule composition {
@@ -85,15 +85,15 @@ rule element {
     || <component_clause>
     ||  'replaceable' [
       <class_definition> || <component_clause>
-    ]  [<constraining_clause> <comment>]?
+    ]  [<constraining_clause> <description>]?
   ]
 }
 
 rule import_clause {
   'import'  [
     ||  <IDENT> '=' <name>
-    ||  <name> [ '.' [ '*' || '{' <import_list> '}' ] ]?
-  ]  <comment>
+    ||  <name> [ '.*' || '.' [ '*' || '{' <import_list> '}' ] ]?
+  ]  <description>
 }
 
 rule import_list { <IDENT> [ ',' <IDENT> ]* }
