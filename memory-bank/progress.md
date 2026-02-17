@@ -2,24 +2,29 @@
 
 ## Current status
 
-Memory Bank has been initialized with all core files required by project rules.
+Docker-based local testing and Docker-backed GitHub Actions CI have been added.
 
 ## What works
 
-- Project brief is in place and defines modernization direction.
-- Product, system, technical, and active context files now exist.
-- README now provides practical onboarding information (install, parse example, test commands, module layout, current status).
+- Docker test image support via `Dockerfile` and `.dockerignore`.
+- Convenience commands via `Makefile` targets:
+  - `docker-build`
+  - `docker-test`
+  - `docker-shell`
+- GitHub Actions workflow (`.github/workflows/ci.yml`) that builds and runs tests in Docker.
+- README documentation for Docker usage and CI status badge.
 
 ## What remains
 
-- Execute modernization tasks from `projectbrief.md` (extensions, parser optimization, actions, metadata updates).
-- Expand progress tracking as implementation milestones are completed.
+- Optionally pin `rakudo-star` to a specific version tag for stronger reproducibility.
+- Optionally remove/retire legacy CI files (`.travis.yml`, `appveyor.yml`) once migration is fully validated.
+- Continue parser modernization tasks from `projectbrief.md` (extensions, parser optimization, actions, metadata updates).
 
 ## Known issues
 
-- No new implementation changes were made in parser code as part of this initialization-only task.
+- Docker and CI changes were not executed in this session (files were updated, but container build/test runtime validation is still recommended in your environment).
 
 ## Recent evolution
 
-- Established baseline Memory Bank documentation structure for reliable future sessions.
-- Upgraded repository README from minimal placeholder text to concise user-facing documentation.
+- Added first-class Docker workflow for local tests.
+- Migrated active CI path to GitHub Actions using Docker-based execution.
