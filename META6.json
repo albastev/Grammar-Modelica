@@ -6,6 +6,10 @@
     "authors" : [ "Steven Albano" ],
     "provides" : {
         "Grammar::Modelica" : "lib/Grammar/Modelica.rakumod",
+        "Grammar::Modelica::Actions" : "lib/Grammar/Modelica/Actions.rakumod",
+        "Grammar::Modelica::Actions::ClassDefinition" : "lib/Grammar/Modelica/Actions/ClassDefinition.rakumod",
+        "Grammar::Modelica::Actions::Core" : "lib/Grammar/Modelica/Actions/Core.rakumod",
+        "Grammar::Modelica::Actions::Expressions" : "lib/Grammar/Modelica/Actions/Expressions.rakumod",
         "Grammar::Modelica::ClassDefinition" : "lib/Grammar/Modelica/ClassDefinition.rakumod",
         "Grammar::Modelica::ComponentClause" : "lib/Grammar/Modelica/ComponentClause.rakumod",
         "Grammar::Modelica::Equations" : "lib/Grammar/Modelica/Equations.rakumod",
