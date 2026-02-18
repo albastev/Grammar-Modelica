@@ -5,7 +5,7 @@ use Test;
 use lib 'lib';
 use Grammar::Modelica;
 
-plan 177;
+plan 187;
 
 grammar TestExpression is Grammar::Modelica {
   rule TOP {^ <expression> $}
@@ -228,6 +228,20 @@ grammar TestFunctionCallArgs is Grammar::Modelica {
 ok TestFunctionCallArgs.parse('()');
 ok TestFunctionCallArgs.parse('(function_arguments)');
 ok TestFunctionCallArgs.parse('( function_arguments )');
+
+grammar TestNamedArgsInCall is Grammar::Modelica {
+  rule TOP {^ <component_reference> <function_call_args> $}
+}
+ok TestNamedArgsInCall.parse('foo(a=1)');
+ok TestNamedArgsInCall.parse('foo(1,a=2)');
+ok TestNamedArgsInCall.parse('foo(lineColor={200,200,200})');
+ok TestNamedArgsInCall.parse('foo(extent={{-100,-100},{100,100}})');
+ok TestNamedArgsInCall.parse('foo(lineColor={200,200,200},extent={{-100,-100},{100,100}})');
+ok TestNamedArgsInCall.parse('foo(cb=function valid_name())');
+ok TestNamedArgsInCall.parse('foo(1,lineColor={1,2,3},radius=25.0)');
+nok TestNamedArgsInCall.parse('foo(a=)');
+nok TestNamedArgsInCall.parse('foo(1,,a=2)');
+nok TestNamedArgsInCall.parse('foo(lineColor={200,200,200},)');
 
 grammar TestFunctionArgumentsNonFirst is Grammar::Modelica {
   rule TOP {^<function_arguments_non_first>$}

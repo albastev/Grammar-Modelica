@@ -2,7 +2,7 @@
 
 ## Current status
 
-Docker-based local testing and Docker-backed GitHub Actions CI have been added, and module packaging has been modernized to `.rakumod`.
+Docker-based local testing and Docker-backed GitHub Actions CI are in place, module packaging has been modernized to `.rakumod`, and the grammar has now been aligned with key Modelica 3.6 concrete syntax updates.
 
 ## What works
 
@@ -16,6 +16,18 @@ Docker-based local testing and Docker-backed GitHub Actions CI have been added, 
   - `docker-shell`
 - GitHub Actions workflow (`.github/workflows/ci.yml`) that builds and runs tests in Docker.
 - README documentation for Docker usage and CI status badge.
+- Modelica 3.6 grammar alignment updates completed in parser code:
+  - Added `description` / `description_string` productions.
+  - Kept `comment` / `string_comment` as compatibility aliases.
+  - Added `function_partial_application` and integrated it in function-argument grammar.
+  - Updated `import_clause` to explicitly allow `name.*` / `name .*` form.
+  - Updated class grammar rules to use `description` naming.
+- Test coverage updated for 3.6-oriented behavior in:
+  - `t/ClassDefinition.t`
+  - `t/Expressions.t`
+- Dockerized test suite currently passes:
+  - `docker build --no-cache --progress=plain -t grammar-modelica-test .`
+  - `docker run --rm grammar-modelica-test`
 
 ## What remains
 
@@ -25,11 +37,14 @@ Docker-based local testing and Docker-backed GitHub Actions CI have been added, 
 
 ## Known issues
 
-- Docker and CI changes were not executed in this session (files were updated, but container build/test runtime validation is still recommended in your environment).
-- Runtime validation of the latest extension-migration change could not be executed in this session because `raku`, `prove`, and `make` were unavailable on PATH in the current shell.
+- `raku`, `prove`, and `make` are still unavailable on PATH in the current shell; Docker remains the validated execution path in this environment.
 
 ## Recent evolution
 
 - Migrated module files and `META6.json` mappings from deprecated `.pm6` usage to modern `.rakumod` usage to address deprecation warnings.
 - Added first-class Docker workflow for local tests.
 - Migrated active CI path to GitHub Actions using Docker-based execution.
+- Synced implemented grammar portions from Modelica 3.4 to 3.6 concrete syntax for:
+  - description/comment production naming,
+  - function partial application production support,
+  - explicit import wildcard tokenization (`.*`).

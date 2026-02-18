@@ -1,37 +1,74 @@
 #!perl6
 
 use v6;
-use Test;
 use lib 'lib';
 use Grammar::Modelica;
-# use Grammar::Tracer;
 
+# Usage:
+#   raku -Ilib examples/parseThemAll.p6 <modelica-dir> [--jobs=N]
+#
+# Output:
+#   - One line per file: OK/FAIL/ERROR
+#   - Final summary: passed/failed/total
+#
+# Exit code:
+#   - 0 when all files parse successfully
+#   - 1 when any file fails
 
-plan 313;
+sub parse-one(IO::Path:D $file --> Bool) {
+    my $contents = $file.slurp;
+    my $match = Grammar::Modelica.parse($contents);
 
-sub light($file) {
-  my $fh = open $file, :r;
-  my $contents = $fh.slurp-rest;
-  $fh.close;
-
-  my $match = Grammar::Modelica.parse($contents);
-  say $file;
-  ok $match;
-  #say $match;
+    if $match {
+        say "OK\t$file";
+        True;
+    }
+    else {
+        say "FAIL\t$file";
+        False;
+    }
 }
 
-sub MAIN($modelica-dir) {
-    say "directory: $modelica-dir";
-    die "Can't find directory" if ! $modelica-dir.IO.d;
-    
+sub MAIN(
+    Str:D $modelica-dir,
+    Int:D :$jobs = $*KERNEL.cpu-cores
+) {
+    die "Can't find directory: $modelica-dir" if !$modelica-dir.IO.d;
+
     # https://docs.perl6.org/routine/dir
     my @stack = $modelica-dir.IO;
     my @files;
-    while @stack { 
-      for @stack.pop.dir -> $path { 
-        @files.push($path) if $path.f && $path.extension.lc eq 'mo'; 
-        @stack.push: $path if $path.d;
-      }
+    while @stack {
+        for @stack.pop.dir -> $path {
+            @files.push($path) if $path.f && $path.extension.lc eq 'mo';
+            @stack.push: $path if $path.d;
+        }
     }
-    @files.race.map({light($_)});
+
+    @files = @files.sort;
+    die "No .mo files found under: $modelica-dir" if @files.elems == 0;
+
+    say "Directory: $modelica-dir";
+    say "Found {@files.elems} .mo files";
+    say "Using $jobs parallel worker(s)";
+
+    my @results = @files.race(:degree($jobs)).map(-> $file {
+        my $ok = try {
+            parse-one($file);
+        };
+
+        unless $ok.defined {
+            my $error = $! // 'Unknown error';
+            say "ERROR\t$file\t$error";
+            $ok = False;
+        }
+
+        $ok;
+    }).Array;
+
+    my $failed = @results.grep({ !$_ }).elems;
+    my $passed = @results.elems - $failed;
+
+    say "Summary: passed=$passed failed=$failed total={@results.elems}";
+    exit($failed == 0 ?? 0 !! 1);
 }

@@ -8,6 +8,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      MSL_TAG: v4.0.0
+      MSL_DIR: _deps/ModelicaStandardLibrary
 
     steps:
       - name: Checkout
@@ -18,3 +21,24 @@ jobs:
 
       - name: Run test suite in container
         run: docker run --rm grammar-modelica-test
+
+      - name: Fetch Modelica Standard Library
+        run: |
+          rm -rf "${MSL_DIR}"
+          git clone --depth 1 --branch "${MSL_TAG}" https://github.com/modelica/ModelicaStandardLibrary.git "${MSL_DIR}"
+
+      - name: Parse full Modelica Standard Library
+        run: |
+          set -o pipefail
+          docker run --rm \
+            -v "${{ github.workspace }}:/app" \
+            -w /app \
+            grammar-modelica-test \
+            raku -Ilib examples/parseThemAll.p6 "${MSL_DIR}" | tee msl-parse.log
+
+      - name: Upload MSL parse log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: msl-parse-log
+          path: msl-parse.log

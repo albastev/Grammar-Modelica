@@ -76,9 +76,9 @@ rule function_call_args {
 }
 
 rule function_arguments {
-  ||  <expression> [ [ ',' <function_arguments_non_first> ] || [ <|w>'for'<|w> <for_indices>] ]?
-  ||  <function_partial_application> [ ',' <function_arguments_non_first> ]?
   ||  <named_arguments>
+  ||  <function_partial_application> [ ',' <function_arguments_non_first> ]?
+  ||  <expression> [ [ ',' <function_arguments_non_first> ] || [ <|w>'for'<|w> <for_indices>] ]?
 }
 
 rule function_arguments_non_first {
